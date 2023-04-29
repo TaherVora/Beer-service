@@ -15,8 +15,9 @@ public class BeerController {
         return new ResponseEntity<>(BeerDto.builder().build(), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity saveNewBeer(@RequestBody BeerDto beerDto){
+
         return new ResponseEntity(HttpStatus.CREATED);
     }
     @PutMapping("/{beerId}")
