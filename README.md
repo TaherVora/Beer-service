@@ -1,2 +1,3 @@
-# Beer-service
-Check-out MSSC Beer Service directory
+# MSSC Beer Service
+
+Spring Boot Micro service example
