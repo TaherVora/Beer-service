@@ -1,6 +1,7 @@
 package com.taher.beerservice.web.controller;
 
 import com.taher.beerservice.repositories.BeerRepository;
+import com.taher.beerservice.service.BeerService;
 import com.taher.beerservice.web.mappers.BeerMapper;
 import com.taher.beerservice.web.model.BeerDto;
 import lombok.RequiredArgsConstructor;
@@ -15,30 +16,19 @@ import java.util.UUID;
 @RequestMapping("/api/v1/beer")
 public class BeerController {
 
-    private final BeerMapper beerMapper;
-    private final BeerRepository beerRepository;
+    private final BeerService beerService;
     @GetMapping("/{beerId}")
     public ResponseEntity<BeerDto> getBeerById(@PathVariable UUID beerId){
-        return new ResponseEntity<>(beerMapper.BeerToBeerDto(beerRepository.findById(beerId).get()), HttpStatus.OK);    }
+        return new ResponseEntity<>(beerService.getById(beerId), HttpStatus.OK);
+    }
 
     @PostMapping("/")
     public ResponseEntity saveNewBeer(@Validated @RequestBody BeerDto beerDto){
-        beerRepository.save(beerMapper.BeerDtoToBeer(beerDto));
-
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(beerService.saveNewBeer(beerDto), HttpStatus.CREATED);
     }
     @PutMapping("/{beerId}")
     public ResponseEntity updateBeerById(@PathVariable UUID beerId, @Validated @RequestBody BeerDto beerDto){
-        beerRepository.findById(beerId).ifPresent(beer -> {
-            beer.setBeerName(beerDto.getBeerName());
-            beer.setBeerStyle(beerDto.getBeerStyle().name());
-            beer.setPrice(beerDto.getPrice());
-            beer.setUpc(beerDto.getUpc());
-
-            beerRepository.save(beer);
-        });
-
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(beerService.updateBeer(beerId,beerDto),HttpStatus.NO_CONTENT);
     }
 
 
